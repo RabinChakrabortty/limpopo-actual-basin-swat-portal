@@ -12,12 +12,16 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 APP_TITLE = 'Limpopo Hybrid Digital Twin Portal'
+
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / 'data'
+
 VECTOR_DIR = DATA_DIR / 'vector'
 UPLOAD_DIR = DATA_DIR / 'uploads'
 SWAT_DIR = DATA_DIR / 'swat'
-for p in (VECTOR_DIR, UPLOAD_DIR, SWAT_DIR): p.mkdir(parents=True, exist_ok=True)
+
+for p in (VECTOR_DIR, UPLOAD_DIR, SWAT_DIR):
+    p.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title=APP_TITLE, version='5.0.0')
 app.mount('/files', StaticFiles(directory=str(DATA_DIR)), name='files')
