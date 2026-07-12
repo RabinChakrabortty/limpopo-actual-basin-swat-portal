@@ -1,1 +1,11 @@
+Add near the imports:
 
+from raster_api import router as raster_router
+
+After:
+app = FastAPI(title=APP_TITLE, version=APP_VERSION)
+
+add:
+app.include_router(raster_router)
+
+The raster explorer will be available at /rasters.
