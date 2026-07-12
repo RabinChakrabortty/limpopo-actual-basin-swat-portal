@@ -1,0 +1,2 @@
+system:index,MAIN_BAS,basin_area_km2,basin_name,generated_date,level4_count,level6_count,mean_annual_et_mm,mean_elevation_m,mean_ndvi,mean_slope_degree,mean_temperature_c,rainfall_climatology_mm_year,rainfall_recent_mm_year,river_feature_count,.geo
+0,1060012590,412582.5388229943,Limpopo Basin,2026-07-12,9,50,442.28057125307106,799.3344052452425,0.469663997059934,2.5712597000188686,21.471870294045818,514.4564179415886,576.3707871460705,7081,"{""type"":""MultiPoint"",""coordinates"":[]}"
