@@ -4,3 +4,7 @@ httpx
 python-multipart
 pandas
 openpyxl
+numpy
+rasterio
+Pillow
+matplotlib
