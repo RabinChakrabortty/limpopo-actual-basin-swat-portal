@@ -1,1 +1,5 @@
+GOOGLE_DRIVE_FOLDER_NAME=Limpopo_DigitalTwin_Exports
+GOOGLE_DRIVE_FOLDER_ID=1C8S9brAQ3Qa3kyoOXpmzEgvAEX98bkQW
+GOOGLE_DRIVE_CREDENTIALS_FILE=/etc/secrets/google-drive-service-account.json
+RASTER_CACHE_DIR=/tmp/limpopo_rasters
 
