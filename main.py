@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 Limpopo Hybrid Digital Twin Portal
 ==================================
@@ -32,8 +30,10 @@ from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
+from raster_api import router as raster_router
+
 APP_TITLE = "Limpopo Hybrid Digital Twin Portal"
-APP_VERSION = "6.0.0"
+APP_VERSION = "7.0.0"
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -47,6 +47,7 @@ for folder in (VECTOR_DIR, UPLOAD_DIR, SWAT_DIR, RASTER_DIR, METADATA_DIR):
     folder.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title=APP_TITLE, version=APP_VERSION)
+app.include_router(raster_router)
 app.mount("/files", StaticFiles(directory=str(DATA_DIR)), name="files")
 
 # Cache external API responses to reduce API calls and improve Render stability.
@@ -301,6 +302,7 @@ def module_statuses() -> list[dict[str, str]]:
         {"module": "Open-Meteo Air Quality", "status": "Active", "need": "No key"},
         {"module": "NASA POWER", "status": "Active", "need": "No key"},
         {"module": "Google Earth Engine", "status": "Configured" if os.getenv("GEE_PROJECT_ID") else "Credential required", "need": "GEE project/service-account workflow"},
+        {"module": "Google Drive Raster Store", "status": "Configured" if os.getenv("GOOGLE_DRIVE_FOLDER_ID") else "Credential required", "need": "Drive folder ID, service-account JSON and shared folder access"},
         {"module": "Copernicus CDS", "status": "Configured" if os.getenv("CDS_API_KEY") else "Credential required", "need": "CDS API key and dataset licence"},
         {"module": "Copernicus Data Space", "status": "Configured" if os.getenv("COPERNICUS_CLIENT_ID") else "Credential required", "need": "OAuth client ID and secret"},
         {"module": "SWAT / SWAT+", "status": "Upload required", "need": "Actual calibrated model outputs"},
@@ -993,7 +995,7 @@ header{height:76px;background:var(--navy);color:#fff;display:flex;align-items:ce
 </style>
 </head>
 <body>
-<header><div class="title"><h1>Limpopo Hybrid Digital Twin Portal</h1><p>Live APIs • real official geometry • raster-like API grid • uploaded GEE, SWAT and station data • control-period scenarios.</p></div><button class="top" onclick="methods()">Methods</button><button class="top" onclick="upload()">Upload data</button><a class="top" href="/download/live-summary.csv" target="_blank">Live CSV</a></header>
+<header><div class="title"><h1>Limpopo Hybrid Digital Twin Portal</h1><p>Live APIs • real official geometry • Google Drive GEE rasters • SWAT and station data • control-period scenarios.</p></div><a class="top" href="/rasters" target="_blank">GEE Raster Explorer</a><button class="top" onclick="methods()">Methods</button><button class="top" onclick="upload()">Upload data</button><a class="top" href="/download/live-summary.csv" target="_blank">Live CSV</a></header>
 <div class="app"><aside class="sidebar"><div class="sidebar-head"><div class="tabs"><button>Data</button><button onclick="statusPanel()">System status</button><button onclick="upload()">Upload</button></div><input id="search" class="search" placeholder="Search components" oninput="filterItems()"></div><div id="catalogue" class="catalogue"></div></aside>
 <main class="workspace"><div id="map" class="map"></div><div id="notice" class="notice">Connecting to live API services…</div>
 <div class="map-controls"><label for="outputSelect">Basin output map</label><select id="outputSelect"></select><label for="gridSize">Live grid resolution</label><select id="gridSize"><option value="4">4 × 4 (fast)</option><option value="5" selected>5 × 5 (standard)</option><option value="6">6 × 6 (detailed)</option></select><button onclick="loadOutputMap()">Load selected map</button><button class="btn gray" onclick="clearRaster()">Clear raster grid</button><small>Live maps are regular weather-model grid samples. Official CHIRPS/ERA5-Land/Sentinel/SWAT rasters should be added through GEE or upload.</small></div>
