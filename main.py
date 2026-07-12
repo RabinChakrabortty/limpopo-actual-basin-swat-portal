@@ -31,7 +31,16 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from raster_api import router as raster_router
+app = FastAPI(title=APP_TITLE, version=APP_VERSION)
 
+app.include_router(raster_router)
+
+app.mount(
+    "/files",
+    StaticFiles(directory=str(DATA_DIR)),
+    name="files",
+)
+Connect raster API router
 APP_TITLE = "Limpopo Hybrid Digital Twin Portal"
 APP_VERSION = "7.0.0"
 
